@@ -2,11 +2,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Build the app') {
-            sh 'dotnet build'
+        stage("Restore project dependencies") {
+            steps {
+                sh 'dotnet restore'
+            }
         }
-        stage('Test the app') {
-            sh 'dotnet test'
+        stage('Build the project') {
+            steps {
+                sh 'dotnet build --no-restore'
+            }
+        }
+        stage('Test the project') {
+            steps {
+                sh 'dotnet test --no-build --verbosity normal'
+            }
         }
     }
 }
